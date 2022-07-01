@@ -75,10 +75,10 @@ const toTopDiv = <div onClick={topHandler} className="flex justify-center bottom
             <button className="bg-slate-300 p-2 w-full rounded-lg border-2 border-black shadow-lg active:scale-95 md:w-1/2 md:mx-auto" onClick={props.kembali}>Kembali</button>
         </div>
         <div className="flex justify-between gap-2 m-2 p-2 ">
-            {sebelumnya === false ? '' : <button onClick={() => backHandler (sebelumnya.id)} className="bg-green-300 p-2 rounded-lg px-5">
+            {sebelumnya === false ? '' : <button onClick={() => backHandler (sebelumnya.id)} className="bg-green-300 p-2 rounded-lg px-5 active:scale-95">
                ({sebelumnya.nama_latin}) Surat Sebelumnya
             </button>}
-            <button onClick={() => nextHandler (selanjutnya.id)} className={`bg-green-300 p-2 rounded-lg px-5 ${sebelumnya === false && 'mx-auto'}`}>
+            <button onClick={() => nextHandler (selanjutnya.id)} className={`bg-green-300 p-2 rounded-lg px-5 ${sebelumnya === false && 'mx-auto'} active:scale-95`}>
                ({selanjutnya.nama_latin}) Surat Selanjutnya
             </button>
         </div>
