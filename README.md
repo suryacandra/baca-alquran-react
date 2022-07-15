@@ -2,6 +2,4 @@
 
 Demo : https://baca-alquran-react.vercel.app/
 
-# To-Do 
-
-- i forget to not add localstorage lol
+well its slightly better now
