@@ -4,8 +4,6 @@ import ItemList from './ItemList'
 const Main = () => {
   const [see, setSee] = useState(true)
 
-  console.log('b')
-
   return (
     <div className="flex flex-col">
       {see && <div className="bg-[#bcecca]">

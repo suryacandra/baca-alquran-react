@@ -14,8 +14,6 @@ const ItemList = (props) => {
   const [top, setTop] = useState(false)
   const [loading, setLoading] = useState(true)
 
-  console.log('a')
-
 
   const fetchData = useCallback(async () => {
     setLoading(true)
