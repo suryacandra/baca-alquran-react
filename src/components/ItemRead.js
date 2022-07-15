@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react'
 
 const ItemRead = props => {
-    const {nama, namaArab, jumlahAyat, ayat, audio, turun, selanjutnya, sebelumnya, back, next} = props
+    const {nama, namaArab, jumlahAyat, ayat, audio, turun, selanjutnya, sebelumnya, back, next, load} = props
     const [play, setPlay] = useState(false)
     const [toTop, setToTop] = useState(false)
     const audioRef = useRef()
+
+    console.log(nama)
 
     const seeAyat = ayat.map(item =>
     <div className="bg-white shadow-lg p-5 m-2 md:mx-auto md:w-3/4" key={item.id}>
@@ -70,17 +72,18 @@ const toTopDiv = <div onClick={topHandler} className="flex justify-center bottom
     </div>
 
   return (
-    <div className="mt-28">
+    <>
+    {!load && <div className="mt-28">
         <div className="m-2 flex mb-10">
             <button className="bg-slate-300 p-2 w-full rounded-lg border-2 border-black shadow-lg active:scale-95 md:w-1/2 md:mx-auto" onClick={props.kembali}>Kembali</button>
         </div>
         <div className="flex justify-between gap-2 m-2 p-2 ">
-            {sebelumnya === false ? '' : <button onClick={() => backHandler (sebelumnya.id)} className="bg-green-300 p-2 rounded-lg px-5 active:scale-95">
+            {!sebelumnya ? '' : <button onClick={() => backHandler (sebelumnya.id)} className={`bg-green-300 p-2 rounded-lg px-5 ${!selanjutnya && 'mx-auto'} active:scale-95`}>
                ({sebelumnya.nama_latin}) Surat Sebelumnya
             </button>}
-            <button onClick={() => nextHandler (selanjutnya.id)} className={`bg-green-300 p-2 rounded-lg px-5 ${sebelumnya === false && 'mx-auto'} active:scale-95`}>
+            {!selanjutnya ? '' : <button onClick={() => nextHandler (selanjutnya.id)} className={`bg-green-300 p-2 rounded-lg px-5 ${!sebelumnya && 'mx-auto'} active:scale-95`}>
                ({selanjutnya.nama_latin}) Surat Selanjutnya
-            </button>
+            </button>}
         </div>
         <div className="flex flex-col gap-4 shadow-lg p-5 m-2 bg-white">
             <h1 className="font-mono font-bold tracking-widest text-2xl">{nama} - {namaArab}</h1>
@@ -92,9 +95,13 @@ const toTopDiv = <div onClick={topHandler} className="flex justify-center bottom
             {play ? <button className="p-2 px-5 w-full bg-red-300 rounded-lg" onClick={pauseAudio}>Pause Audio</button> : <button className="p-2 px-5 w-full bg-blue-300 rounded-lg" onClick={playAudio}>Play Audio</button>}
         </div>
             {seeAyat}
-        
         {toTop && toTopDiv}
-    </div>
+    </div>}
+    {load && <div className="flex justify-center w-full my-12">
+<span className="text-center">Loading...</span>
+</div>}
+
+    </>
   )
 }
 

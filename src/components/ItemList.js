@@ -1,4 +1,5 @@
 import React, { useState, useEffect} from 'react'
+
 import Item from './Item'
 import ItemRead from './ItemRead'
 import Select from 'react-select'
@@ -6,13 +7,16 @@ import Select from 'react-select'
 
 const ItemList = (props) => {
   const [items, setItems] = useState([])
+  const [filtered, setFiltered] = useState([])
   const [selected, setSelected] = useState('')
   const [filter, setFilter] = useState(false)
   const [see, setSee] = useState(false)
   const [top, setTop] = useState(false)
   const [check, setCheck] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   const fetchData = async () => {
+    setLoading(true)
     const result = await fetch('https://quran-api.santrikoding.com/api/surah')
     const data = await result.json()
     const itemData = []
@@ -26,10 +30,11 @@ const ItemList = (props) => {
       })
     }
     setItems(itemData)
+    setFiltered(itemData)
     setSee(false)
     props.see(false)
-    setFilter(false)
     setSelected('')
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -48,8 +53,9 @@ const ItemList = (props) => {
         top: 0
     })
 }
-
+  
   const seeHandler = async (id) => {
+    setLoading(true)
     const result = await fetch('https://quran-api.santrikoding.com/api/surah/' + id)
     const data = await result.json()
     let itemData = {}
@@ -72,30 +78,11 @@ const ItemList = (props) => {
     props.see(true)
     setTop(false)
     topHandler()
+    setLoading(false)
   }
 
   const backHandler = async (id) => {
-    const result = await fetch('https://quran-api.santrikoding.com/api/surah/' + id)
-    const data = await result.json()
-    let itemData = []
-   
-    itemData = {
-        id: data.nomor,
-        nama: data.nama_latin,
-        namaArab: data.nama,
-        jumlahAyat: data.jumlah_ayat,
-        ayat: data.ayat,
-        arti: data.arti,
-        turun: data.tempat_turun,
-        audio: data.audio,
-        selanjutnya: data.surat_selanjutnya,
-        sebelumnya: data.surat_sebelumnya
-      }
-    
-    setItems(itemData)
-  }
-
-  const nextHandler = async (id) => {
+    setLoading(true)
     const result = await fetch('https://quran-api.santrikoding.com/api/surah/' + id)
     const data = await result.json()
     let itemData = {}
@@ -114,6 +101,30 @@ const ItemList = (props) => {
       }
     
     setItems(itemData)
+    setLoading(false)
+  }
+
+  const nextHandler = async (id) => {
+    setLoading(true)
+    const result = await fetch('https://quran-api.santrikoding.com/api/surah/' + id)
+    const data = await result.json()
+    let itemData = {}
+   
+    itemData = {
+        id: data.nomor,
+        nama: data.nama_latin,
+        namaArab: data.nama,
+        jumlahAyat: data.jumlah_ayat,
+        ayat: data.ayat,
+        arti: data.arti,
+        turun: data.tempat_turun,
+        audio: data.audio,
+        selanjutnya: data.surat_selanjutnya,
+        sebelumnya: data.surat_sebelumnya
+      }
+    
+    setItems(itemData)
+    setLoading(false)
   }
 
 
@@ -136,13 +147,15 @@ const options = []
   }
 
   const filterHandler = e => {
-    const tempArr = [...items]
-    if(!filter){
+    setSelected(e)
+    if(e){
       const filter = e.value
-      const filteredItems = tempArr.filter(item => item.nama.toLowerCase().includes(filter.toLowerCase()))
-      setItems(filteredItems)
+      const a = items.filter(item => item.nama.toLowerCase().includes(filter.toLowerCase()))
+      setFiltered(a)
       setFilter(true)
-      setSelected(filter)
+    } else {
+      setFilter(false)
+      setFiltered(items)
     }
   }
 
@@ -154,17 +167,20 @@ const options = []
 
   return (
     <div className="flex gap-6 flex-col">
-      {!see && <div className="static z-10 mx-5 mt-2 border-2 border-black grid p-2 rounded-lg grid-cols-2">
+      {!see && !loading && <div className="static z-10 mx-5 mt-2 border-2 border-black grid p-2 rounded-lg grid-cols-2">
         <span className="self-center">Cari Surat</span>
-      <Select options={options} value={options.filter(option => option.value === selected)} onChange={filterHandler} />
+      <Select options={options} value={selected} onChange={filterHandler} />
+        </div>}
+      {loading && <div className="flex justify-center w-full mt-10">
+        <span className="text-center">Loading...</span>
         </div>}
       {filter && <div className="m-2">
-        <button onClick={disableFilterHandler} className="bg-slate-300 p-2 w-full rounded-lg border-2 border-black active:scale-95">Kembali</button>
+        <button onClick={disableFilterHandler} className="bg-slate-300 p-2 w-full rounded-lg border-2 border-black active:scale-95">Lihat semua</button>
       </div> }
       <div className="md:grid md:grid-cols-3">
-      {see === false && items.map(item => <Item key={item.id} id={item.id} nama={item.nama} namaArab={item.namaArab} ayat={item.ayat} arti={item.arti} see={seeHandler} />)}
+      {!see && !loading && filtered.map(item => <Item key={item.id} id={item.id} nama={item.nama} namaArab={item.namaArab} ayat={item.ayat} arti={item.arti} see={seeHandler} />)}
       </div>
-      {see && <ItemRead id={items.id} nama={items.nama} namaArab={items.namaArab} ayat={items.ayat} jumlahAyat={items.jumlahAyat} audio={items.audio} turun={items.turun} selanjutnya={items.selanjutnya} sebelumnya={items.sebelumnya} next={nextHandler} back={backHandler} kembali={fetchData} />}
+      {see && <ItemRead id={items.id} nama={items.nama} namaArab={items.namaArab} ayat={items.ayat} jumlahAyat={items.jumlahAyat} audio={items.audio} turun={items.turun} selanjutnya={items.selanjutnya} sebelumnya={items.sebelumnya} next={nextHandler} back={backHandler} kembali={fetchData} load={loading} />}
       {top && toTopDiv}
     </div>
   )
