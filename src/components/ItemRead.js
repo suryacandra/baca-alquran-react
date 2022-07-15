@@ -6,8 +6,6 @@ const ItemRead = props => {
     const [toTop, setToTop] = useState(false)
     const audioRef = useRef()
 
-    console.log(nama)
-
     const seeAyat = ayat.map(item =>
     <div className="bg-white shadow-lg p-5 m-2 md:mx-auto md:w-3/4" key={item.id}>
         <div className="flex flex-col md:grid md:grid-cols-2">
@@ -97,7 +95,7 @@ const toTopDiv = <div onClick={topHandler} className="flex justify-center bottom
             {seeAyat}
         {toTop && toTopDiv}
     </div>}
-    {load && <div className="flex justify-center w-full my-12">
+    {load && <div className="flex justify-center w-full my-24">
 <span className="text-center">Loading...</span>
 </div>}
 

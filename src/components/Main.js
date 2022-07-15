@@ -2,15 +2,13 @@ import React, { useState } from 'react'
 import ItemList from './ItemList'
 
 const Main = () => {
-  const [see, setSee] = useState(false)
+  const [see, setSee] = useState(true)
 
-  const seeHandler = params => {
-    setSee(params)
-  }
-  
+  console.log('b')
+
   return (
     <div className="flex flex-col">
-      {!see && <div className="bg-[#bcecca]">
+      {see && <div className="bg-[#bcecca]">
         <div className="font-mono pt-28 p-10 shadow-lg flex flex-col items-center text-center gap-5">
           <p className="u">Terima kasih untuk <a className="font-mono tracking-widest font-bold text-blue-600 underline cursor-pointer" href="https://santrikoding.com/" target="_blank" rel="noreferrer">Santrikoding</a> yang telah menyediakan <a className="bfont-mono tracking-widest font-bold text-blue-600 underline cursor-pointer" href="https://quran-api.santrikoding.com/" target="_blank" rel="noreferrer">
             API
@@ -23,7 +21,7 @@ const Main = () => {
         </div>
       </div>}
       <div className="mt-2 w-full">
-        <ItemList see={seeHandler} />
+        <ItemList see={setSee} />
       </div>
     </div>
   )
