@@ -12,8 +12,14 @@ const ItemList = (props) => {
   const [filter, setFilter] = useState(false)
   const [see, setSee] = useState(false)
   const [top, setTop] = useState(false)
+<<<<<<< HEAD
   const [loading, setLoading] = useState(true)
 
+=======
+  const [check, setCheck] = useState(false)
+  
+  console.log('a')
+>>>>>>> f5c69ff232b409551ffc7c13adbf8c8fd4bb9c37
 
   const fetchData = useCallback(async () => {
     setLoading(true)
