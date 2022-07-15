@@ -11,6 +11,8 @@ const ItemList = (props) => {
   const [see, setSee] = useState(false)
   const [top, setTop] = useState(false)
   const [check, setCheck] = useState(false)
+  
+  console.log('a')
 
   const fetchData = async () => {
     const result = await fetch('https://quran-api.santrikoding.com/api/surah')
